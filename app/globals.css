@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base theme variables */
+@layer base {
+  :root {
+    /* Light Mode Colors */
+    --background: 210 33% 98%; /* #F7F9FC - Very light gray with a soft blue tint */
+    --foreground: 0 0% 18%; /* #2E2E2E - Dark gray for text primary */
+
+    --card: 0 0% 100%; /* #FFFFFF - White */
+    --card-foreground: 0 0% 18%; /* #2E2E2E - Dark gray */
+
+    --popover: 0 0% 100%; /* #FFFFFF - White */
+    --popover-foreground: 0 0% 18%; /* #2E2E2E - Dark gray */
+
+    --primary: 217 91% 60%; /* #3B82F6 - Blue-500 for primary accent */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF - White text on primary */
+
+    --secondary: 210 20% 95%; /* #F0F2F5 - Slightly darker background */
+    --secondary-foreground: 0 0% 18%; /* #2E2E2E - Dark gray */
+
+    --muted: 210 20% 95%; /* #F0F2F5 - Slightly darker background */
+    --muted-foreground: 220 5% 40%; /* #5F6368 - Muted gray for secondary text */
+
+    --accent: 210 20% 95%; /* #F0F2F5 - Slightly darker background */
+    --accent-foreground: 0 0% 18%; /* #2E2E2E - Dark gray */
+
+    --destructive: 0 84% 60%; /* #EF4444 - Red-500 for destructive actions */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF - White text */
+
+    --border: 210 14% 89%; /* #E0E3E7 - Soft gray for borders/dividers */
+    --input: 210 14% 89%; /* #E0E3E7 - Soft gray for input borders */
+    --ring: 213 94% 87%; /* #BFDBFE - Blue-200 for focus rings */
+
+    --success: 160 84% 39%; /* #10B981 - Green-500 for success states */
+    --success-foreground: 0 0% 100%; /* #FFFFFF - White text */
+
+    --warning: 35 92% 50%; /* #F59E0B - Amber-500 for warning states */
+    --warning-foreground: 0 0% 100%; /* #FFFFFF - White text */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark Mode Colors */
+    --background: 240 10% 3.9%; /* #0A0A0C - Very dark blue-gray */
+    --foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --card: 240 10% 3.9%; /* #0A0A0C - Very dark blue-gray */
+    --card-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --popover: 240 10% 3.9%; /* #0A0A0C - Very dark blue-gray */
+    --popover-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --primary: 221 83% 53%; /* #2563EB - Blue-600 for primary accent */
+    --primary-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --secondary: 240 3.7% 15.9%; /* #27272A - Dark gray with slight blue tint */
+    --secondary-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --muted: 240 3.7% 15.9%; /* #27272A - Dark gray with slight blue tint */
+    --muted-foreground: 240 5% 64.9%; /* #A1A1AA - Medium gray */
+
+    --accent: 240 3.7% 15.9%; /* #27272A - Dark gray with slight blue tint */
+    --accent-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --destructive: 0 62.8% 30.6%; /* #7F1D1D - Dark red */
+    --destructive-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --border: 240 3.7% 15.9%; /* #27272A - Dark gray with slight blue tint */
+    --input: 240 3.7% 15.9%; /* #27272A - Dark gray with slight blue tint */
+    --ring: 221 83% 53%; /* #2563EB - Blue-600 for focus rings */
+
+    --success: 142 70% 29%; /* #15803D - Dark green */
+    --success-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+
+    --warning: 35 92% 33%; /* #B45309 - Dark amber */
+    --warning-foreground: 0 0% 98%; /* #FAFAFA - Off-white */
+  }
+
+  /* High Contrast Mode */
+  .high-contrast {
+    --background: 0 0% 100%; /* #FFFFFF - Pure white */
+    --foreground: 0 0% 0%; /* #000000 - Pure black */
+    --primary: 240 100% 50%; /* #0000FF - Pure blue */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF - Pure white */
+    --secondary: 0 0% 90%; /* #E6E6E6 - Light gray */
+    --secondary-foreground: 0 0% 0%; /* #000000 - Pure black */
+    --muted: 0 0% 85%; /* #D9D9D9 - Medium light gray */
+    --muted-foreground: 0 0% 0%; /* #000000 - Pure black */
+    --border: 0 0% 0%; /* #000000 - Pure black */
+  }
+}
+
+/* Base styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+      sans-serif;
+  }
+
+  /* Arabic font support */
+  .font-arabic {
+    font-family: "Tahoma", "Arial Unicode MS", "Lucida Sans Unicode", sans-serif;
+  }
+
+  /* RTL text direction for Arabic */
+  [dir="rtl"] {
+    text-align: right;
+    font-family: "Tahoma", "Arial Unicode MS", "Lucida Sans Unicode", sans-serif;
+  }
+
+  [dir="rtl"] .flex {
+    flex-direction: row-reverse;
+  }
+
+  /* Optimize animations */
+  * {
+    transition-duration: 0.2s;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Status indicators */
+.status-on-time {
+  @apply text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/20;
+}
+
+.status-delayed {
+  @apply text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-900/20;
+}
+
+.status-cancelled {
+  @apply text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/20;
+}
+
+/* Large text mode for accessibility */
+.large-text {
+  font-size: 120%;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-ring;
+}
+
+/* Performance utilities */
+@layer utilities {
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:scale-[1.02];
+  }
+
+  .animate-pulse-opacity {
+    animation: pulse-opacity 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+}
+
+@keyframes pulse-opacity {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
