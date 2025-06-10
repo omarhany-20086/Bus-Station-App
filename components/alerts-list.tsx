@@ -1,11 +1,11 @@
-import type React from "react"
-import type { Alert } from "@/types/alert"
+import type React from "react";
+import type { Alert } from "@/types/alert";
 
 interface AlertsListProps {
-  alerts: Alert[]
+  alerts: Alert[];
 }
 
-const AlertsList: React.FC<AlertsListProps> = ({ alerts }) => {
+export function AlertsList({ alerts }: AlertsListProps) {
   return (
     <div>
       {alerts.length > 0 ? (
@@ -20,7 +20,5 @@ const AlertsList: React.FC<AlertsListProps> = ({ alerts }) => {
         <p>No alerts to display.</p>
       )}
     </div>
-  )
+  );
 }
-
-export default AlertsList

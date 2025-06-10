@@ -1,6 +1,14 @@
-import { StationsList } from "@/components/stations-list"
-import { StationSearch } from "@/components/station-search"
-import { BreadcrumbNav } from "@/components/breadcrumb-nav"
+import { StationsList } from "@/components/stations-list";
+import { StationSearch } from "@/components/station-search";
+import { StationInfo } from "@/components/station-info";
+import { BreadcrumbNav } from "@/components/breadcrumb-nav";
+
+// Mock data for stations
+const stations = [
+  { id: "1", name: "Central Station", code: "CS" },
+  { id: "2", name: "Downtown Terminal", code: "DT" },
+  { id: "3", name: "Airport Hub", code: "AH" },
+];
 
 export default function StationsPage() {
   return (
@@ -16,7 +24,7 @@ export default function StationsPage() {
 
       <StationSearch className="mb-6" />
 
-      <StationsList />
+      <StationsList stations={stations} />
     </div>
-  )
+  );
 }

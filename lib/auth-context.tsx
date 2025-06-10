@@ -1,32 +1,39 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import { useRouter } from "next/navigation"
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
 
 interface User {
-  id: string
-  username: string
-  role: "admin" | "parent" | "child"
-  name: string
-  email?: string
-  age?: number
-  school?: string
-  grade?: string
-  parentId?: string
-  children?: string[]
+  id: string;
+  username: string;
+  role: "admin" | "parent" | "child";
+  name: string;
+  email?: string;
+  age?: number;
+  school?: string;
+  grade?: string;
+  parentId?: string;
+  children?: string[];
 }
 
 interface AuthContextType {
-  isAuthenticated: boolean
-  user: User | null
-  login: (username: string, password: string) => Promise<boolean>
-  logout: () => void
-  loading: boolean
-  checkAuth: () => Promise<boolean>
-  hasPermission: (permission: string) => boolean
+  isAuthenticated: boolean;
+  user: User | null;
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
+  loading: boolean;
+  checkAuth: () => Promise<boolean>;
+  hasPermission: (permission: string) => boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Demo users with different roles
 const DEMO_USERS: User[] = [
@@ -83,7 +90,7 @@ const DEMO_USERS: User[] = [
     grade: "Grade 5",
     parentId: "3",
   },
-]
+];
 
 // Demo credentials
 const VALID_CREDENTIALS = [
@@ -93,7 +100,7 @@ const VALID_CREDENTIALS = [
   { username: "child1", password: "child123", userId: "4" },
   { username: "child2", password: "child123", userId: "5" },
   { username: "child3", password: "child123", userId: "6" },
-]
+];
 
 // Role-based permissions
 const PERMISSIONS = {
@@ -117,107 +124,134 @@ const PERMISSIONS = {
     "receive_notifications",
     "view_schedules",
   ],
-  child: ["view_own_schedule", "view_own_route", "send_messages", "receive_notifications", "view_bus_location"],
-}
+  child: [
+    "view_own_schedule",
+    "view_own_route",
+    "send_messages",
+    "receive_notifications",
+    "view_bus_location",
+  ],
+};
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     checkAuth()
       .then(() => setLoading(false))
-      .catch(() => setLoading(false))
-  }, [])
+      .catch(() => setLoading(false));
+  }, []);
 
   const checkAuth = async (): Promise<boolean> => {
     try {
-      const token = localStorage.getItem("auth_token")
-      const savedUserId = localStorage.getItem("user_id")
+      const token = Cookies.get("auth_token");
+      const savedUserId = Cookies.get("user_id");
 
       if (!token || !savedUserId) {
-        return false
+        return false;
       }
 
-      const foundUser = DEMO_USERS.find((u) => u.id === savedUserId)
+      const foundUser = DEMO_USERS.find((u) => u.id === savedUserId);
 
       if (foundUser) {
-        setUser(foundUser)
-        setIsAuthenticated(true)
-        return true
+        setUser(foundUser);
+        setIsAuthenticated(true);
+        return true;
       }
 
-      return false
+      return false;
     } catch (error) {
-      console.error("Auth check failed:", error)
-      return false
+      console.error("Auth check failed:", error);
+      return false;
     }
-  }
+  };
 
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async (
+    username: string,
+    password: string
+  ): Promise<boolean> => {
     try {
-      const credential = VALID_CREDENTIALS.find((cred) => cred.username === username && cred.password === password)
+      const credential = VALID_CREDENTIALS.find(
+        (cred) => cred.username === username && cred.password === password
+      );
 
       if (!credential) {
-        return false
+        return false;
       }
 
-      const foundUser = DEMO_USERS.find((u) => u.id === credential.userId)
+      const foundUser = DEMO_USERS.find((u) => u.id === credential.userId);
 
       if (!foundUser) {
-        return false
+        return false;
       }
 
-      setUser(foundUser)
-      setIsAuthenticated(true)
+      setUser(foundUser);
+      setIsAuthenticated(true);
 
-      localStorage.setItem("auth_token", `demo-token-${Date.now()}`)
-      localStorage.setItem("user_id", foundUser.id)
+      // Set cookies with expiration
+      Cookies.set("auth_token", `demo-token-${Date.now()}`, { expires: 7 }); // 7 days
+      Cookies.set("user_id", foundUser.id, { expires: 7 });
 
-      return true
+      // Redirect to the original requested page or home
+      const from = searchParams.get("from") || "/";
+      router.push(from);
+
+      return true;
     } catch (error) {
-      console.error("Login failed:", error)
-      return false
+      console.error("Login failed:", error);
+      return false;
     }
-  }
+  };
 
   const logout = () => {
-    setUser(null)
-    setIsAuthenticated(false)
-    localStorage.removeItem("auth_token")
-    localStorage.removeItem("user_id")
-    router.push("/")
-  }
+    setUser(null);
+    setIsAuthenticated(false);
+    Cookies.remove("auth_token");
+    Cookies.remove("user_id");
+    router.push("/login");
+  };
 
   const hasPermission = (permission: string): boolean => {
-    if (!user) return false
-    const userPermissions = PERMISSIONS[user.role] || []
-    return userPermissions.includes(permission)
-  }
+    if (!user) return false;
+    const userPermissions = PERMISSIONS[user.role] || [];
+    return userPermissions.includes(permission);
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading, checkAuth, hasPermission }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        login,
+        logout,
+        loading,
+        checkAuth,
+        hasPermission,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context
+  return context;
 }
 
 // Helper function to get user data by ID
 export function getUserById(id: string): User | undefined {
-  return DEMO_USERS.find((user) => user.id === id)
+  return DEMO_USERS.find((user) => user.id === id);
 }
 
 // Helper function to get children of a parent
 export function getChildrenByParentId(parentId: string): User[] {
-  return DEMO_USERS.filter((user) => user.parentId === parentId)
+  return DEMO_USERS.filter((user) => user.parentId === parentId);
 }

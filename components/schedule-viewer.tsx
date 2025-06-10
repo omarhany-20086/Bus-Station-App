@@ -1,13 +1,13 @@
-import type React from "react"
-import type { Schedule } from "../types/schedule"
+import type React from "react";
+import type { Schedule } from "../types/schedule";
 
 interface ScheduleViewerProps {
-  scheduleData: Schedule | null
+  scheduleData: Schedule | null;
 }
 
-const ScheduleViewer: React.FC<ScheduleViewerProps> = ({ scheduleData }) => {
+export function ScheduleViewer({ scheduleData }: ScheduleViewerProps) {
   if (!scheduleData) {
-    return <div>No schedule data available.</div>
+    return <div>No schedule data available.</div>;
   }
 
   return (
@@ -26,7 +26,5 @@ const ScheduleViewer: React.FC<ScheduleViewerProps> = ({ scheduleData }) => {
         </div>
       ))}
     </div>
-  )
+  );
 }
-
-export default ScheduleViewer

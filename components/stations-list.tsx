@@ -5,7 +5,7 @@ interface StationsListProps {
   stations: Station[]
 }
 
-const StationsList: React.FC<StationsListProps> = ({ stations }) => {
+export const StationsList: React.FC<StationsListProps> = ({ stations }) => {
   return (
     <div>
       <h2>Stations</h2>
@@ -19,5 +19,3 @@ const StationsList: React.FC<StationsListProps> = ({ stations }) => {
     </div>
   )
 }
-
-export default StationsList
