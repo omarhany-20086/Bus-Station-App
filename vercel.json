@@ -6,7 +6,7 @@
       "use": "@vercel/next",
       "config": {
         "buildCommand": "pnpm build",
-        "installCommand": "apt-get update && apt-get install -y libpq-dev && pnpm install --no-frozen-lockfile"
+        "installCommand": "pnpm install --no-frozen-lockfile"
       }
     }
   ],
