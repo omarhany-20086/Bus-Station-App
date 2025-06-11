@@ -1,4 +1,4 @@
-import type React from "react"
+import React from 'react'
 // Performance optimization utilities
 
 // Debounce function for search and input optimization
@@ -117,17 +117,10 @@ export function preloadCriticalResources() {
 export function withErrorBoundary<T extends Record<string, any>>(Component: React.ComponentType<T>) {
   return function WrappedComponent(props: T) {
     try {
-      return <Component {...props} />
+      return React.createElement(Component, props)
     } catch (error) {
       console.error("Component error:", error)
-      return (
-        <div className="p-4 border border-destructive rounded-lg bg-destructive/10">
-          <h3 className="font-semibold text-destructive">حدث خطأ</h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            عذراً، حدث خطأ في تحميل هذا المكون. يرجى إعادة تحميل الصفحة.
-          </p>
-        </div>
-      )
+      return React.createElement('div', { className: 'error-boundary' }, 'Something went wrong')
     }
   }
 }

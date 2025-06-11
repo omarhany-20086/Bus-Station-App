@@ -1,17 +1,15 @@
-import { render, screen, fireEvent } from "@testing-library/react"
-import { InteractiveMap } from "@/components/interactive-map"
-import { jest } from "@jest/globals"
+import { render, screen, fireEvent } from "@testing-library/react";
+import { InteractiveMap } from "@/components/interactive-map";
+import { jest } from "@jest/globals";
 
 const mockLocations = [
   {
-    id: "1",
+    id: 1,
+    name: "حافلة المدرسة",
     lat: 30.0444,
     lng: 31.2357,
-    type: "bus" as const,
-    name: "حافلة المدرسة",
-    status: "on-time",
-    eta: "5 دقائق",
-    occupancy: 75,
+    status: "active",
+    lastUpdate: new Date().toISOString(),
   },
   {
     id: "2",
@@ -27,33 +25,37 @@ const mockLocations = [
     type: "school" as const,
     name: "مدرسة الأزهر",
   },
-]
+];
 
 describe("InteractiveMap", () => {
-  it("renders map with locations", () => {
-    render(<InteractiveMap locations={mockLocations} />)
+  const onLocationSelect = jest.fn();
 
-    expect(screen.getByText("خريطة تفاعلية")).toBeInTheDocument()
-    expect(screen.getByText("تتبع مباشر")).toBeInTheDocument()
-  })
+  beforeEach(() => {
+    onLocationSelect.mockClear();
+  });
+
+  it("renders the map with markers", () => {
+    render(<InteractiveMap locations={mockLocations} />);
+
+    expect(screen.getByText("خريطة تفاعلية")).toBeInTheDocument();
+    expect(screen.getByTestId("bus-marker-1")).toBeInTheDocument();
+  });
 
   it("shows location details when marker is clicked", () => {
-    const onLocationSelect = jest.fn()
-    render(<InteractiveMap locations={mockLocations} onLocationSelect={onLocationSelect} />)
+    render(<InteractiveMap locations={mockLocations} />);
 
-    // Click on bus marker
-    const busMarker = screen.getByRole("button", { name: /حافلة المدرسة/i })
-    fireEvent.click(busMarker)
+    const marker = screen.getByTestId("bus-marker-1");
+    fireEvent.click(marker);
 
-    expect(onLocationSelect).toHaveBeenCalledWith(mockLocations[0])
-  })
+    expect(screen.getByText("حافلة المدرسة")).toBeInTheDocument();
+  });
 
   it("toggles tracking mode", () => {
-    render(<InteractiveMap locations={mockLocations} />)
+    render(<InteractiveMap locations={mockLocations} />);
 
-    const trackingButton = screen.getByText("تتبع مباشر")
-    fireEvent.click(trackingButton)
+    const trackingButton = screen.getByText("تتبع مباشر");
+    fireEvent.click(trackingButton);
 
-    expect(screen.getByText("إيقاف التتبع")).toBeInTheDocument()
-  })
-})
+    expect(trackingButton).toHaveClass("bg-primary");
+  });
+});

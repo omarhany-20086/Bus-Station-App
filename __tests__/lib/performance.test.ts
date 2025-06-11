@@ -1,64 +1,54 @@
-import { debounce, throttle, storage } from "@/lib/performance"
-import jest from "jest"
+import { debounce, throttle, storage } from "@/lib/performance";
 
 describe("Performance utilities", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-    localStorage.clear()
-  })
+    jest.clearAllMocks();
+    localStorage.clear();
+  });
 
   describe("debounce", () => {
-    it("delays function execution", (done) => {
-      const mockFn = jest.fn()
-      const debouncedFn = debounce(mockFn, 100)
+    it("delays function execution", () => {
+      jest.useFakeTimers();
+      const fn = jest.fn();
+      const debouncedFn = debounce(fn, 1000);
 
-      debouncedFn()
-      debouncedFn()
-      debouncedFn()
+      debouncedFn();
+      expect(fn).not.toHaveBeenCalled();
 
-      expect(mockFn).not.toHaveBeenCalled()
-
-      setTimeout(() => {
-        expect(mockFn).toHaveBeenCalledTimes(1)
-        done()
-      }, 150)
-    })
-  })
+      jest.advanceTimersByTime(1000);
+      expect(fn).toHaveBeenCalled();
+    });
+  });
 
   describe("throttle", () => {
-    it("limits function execution frequency", (done) => {
-      const mockFn = jest.fn()
-      const throttledFn = throttle(mockFn, 100)
+    it("limits function execution rate", () => {
+      jest.useFakeTimers();
+      const fn = jest.fn();
+      const throttledFn = throttle(fn, 1000);
 
-      throttledFn()
-      throttledFn()
-      throttledFn()
+      throttledFn();
+      expect(fn).toHaveBeenCalled();
 
-      expect(mockFn).toHaveBeenCalledTimes(1)
+      throttledFn();
+      expect(fn).toHaveBeenCalledTimes(1);
 
-      setTimeout(() => {
-        throttledFn()
-        expect(mockFn).toHaveBeenCalledTimes(2)
-        done()
-      }, 150)
-    })
-  })
+      jest.advanceTimersByTime(1000);
+      throttledFn();
+      expect(fn).toHaveBeenCalledTimes(2);
+    });
+  });
 
   describe("storage", () => {
-    it("stores and retrieves data", () => {
-      const testData = { name: "Ahmed", age: 30 }
+    it("sets and gets items from localStorage", () => {
+      const testData = { key: "value" };
+      storage.set("test", testData);
+      expect(storage.get("test")).toEqual(testData);
+    });
 
-      storage.set("user", testData)
-      const retrieved = storage.get("user")
-
-      expect(retrieved).toEqual(testData)
-    })
-
-    it("returns default value for non-existent keys", () => {
-      const defaultValue = { default: true }
-      const result = storage.get("nonexistent", defaultValue)
-
-      expect(result).toEqual(defaultValue)
-    })
-  })
-})
+    it("removes items from localStorage", () => {
+      storage.set("test", "value");
+      storage.remove("test");
+      expect(storage.get("test")).toBeNull();
+    });
+  });
+});

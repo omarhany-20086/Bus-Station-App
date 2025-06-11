@@ -9,257 +9,131 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Search, HelpCircle, Shield, Bus, Users, MessageSquare, Phone, Mail } from "lucide-react"
 
-const faqData = {
-  safety: [
-    {
-      question: "كيف يتم ضمان أمان الأطفال في التطبيق؟",
-      answer:
-        "نحن نستخدم أحدث تقنيات التشفير لحماية بيانات الأطفال. جميع المجموعات خاصة ومحدودة لأولياء الأمور المتحققين من نفس المدرسة. لا نشارك أي معلومات شخصية مع أطراف ثالثة.",
-    },
-    {
-      question: "من يمكنه رؤية موقع طفلي؟",
-      answer:
-        "فقط أنت كولي أمر يمكنك رؤية موقع طفلك. المعلومات محمية بكلمة مرور ولا يمكن الوصول إليها من قبل أي شخص آخر.",
-    },
-    {
-      question: "ماذا لو فقدت هاتفي؟",
-      answer:
-        "يمكنك تسجيل الدخول من أي جهاز آخر باستخدام بياناتك. كما يمكنك إلغاء تفعيل الجهاز المفقود من إعدادات الحساب.",
-    },
-  ],
-  tracking: [
-    {
-      question: "لماذا لا تظهر الحافلة على الخريطة؟",
-      answer:
-        "تأكد من أن لديك اتصال إنترنت جيد. إذا استمرت المشكلة، قد تكون الحافلة خارج الخدمة أو في منطقة ضعيفة التغطية.",
-    },
-    {
-      question: "كم مرة يتم تحديث موقع الحافلة؟",
-      answer:
-        "يتم تحديث موقع الحافلة كل 30 ثانية عندما تكون في الخدمة. في حالة التأخير أو المشاكل التقنية، قد يكون التحديث أبطأ.",
-    },
-    {
-      question: "كيف أعرف إذا كان طفلي قد ركب الحافلة؟",
-      answer:
-        "ستتلقى إشعاراً فورياً عندما يركب طفلك الحافلة أو ينزل منها. يمكنك أيضاً رؤية حالة الطفل في الصفحة الرئيسية.",
-    },
-  ],
-  carpool: [
-    {
-      question: "كيف أنشئ مجموعة مشاركة سيارة؟",
-      answer:
-        "اذهب إلى قسم 'المشاركة في السيارات' واضغط على 'إنشاء مجموعة جديدة'. املأ المعلومات المطلوبة وادع أولياء الأمور الآخرين.",
-    },
-    {
-      question: "كيف أنضم لمجموعة موجودة؟",
-      answer:
-        "يمكنك البحث عن المجموعات المتاحة في منطقتك ومدرسة طفلك. اضغط على 'طلب الانضمام' وانتظر موافقة مدير المجموعة.",
-    },
-    {
-      question: "هل يمكنني مغادرة مجموعة المشاركة؟",
-      answer: "نعم، يمكنك مغادرة أي مجموعة في أي وقت من إعدادات المجموعة. يُفضل إشعار الأعضاء الآخرين مسبقاً.",
-    },
-  ],
-  technical: [
-    {
-      question: "التطبيق لا يعمل بشكل صحيح، ماذا أفعل؟",
-      answer:
-        "جرب إعادة تشغيل التطبيق أولاً. إذا لم تحل المشكلة، تأكد من أن لديك أحدث إصدار من التطبيق وأن اتصال الإنترنت مستقر.",
-    },
-    {
-      question: "كيف أحدث معلومات طفلي؟",
-      answer: "اذهب إلى 'الملف الشخصي' ثم 'إدارة الأطفال'. يمكنك تحديث المعلومات أو إضافة أطفال جدد.",
-    },
-    {
-      question: "لا أتلقى إشعارات، كيف أحل هذه المشكلة؟",
-      answer: "تحقق من إعدادات الإشعارات في التطبيق وفي إعدادات الهاتف. تأكد من أن الإشعارات مفعلة للتطبيق.",
-    },
-  ],
+interface FAQ {
+  question: string
+  answer: string
 }
 
-export function HelpCenter() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeCategory, setActiveCategory] = useState("safety")
+interface HelpCenterProps {
+  faqs: {
+    general: FAQ[]
+    tracking: FAQ[]
+  }
+}
 
-  const allFaqs = Object.values(faqData).flat()
-  const filteredFaqs = searchQuery
-    ? allFaqs.filter(
-        (faq) =>
-          faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          faq.answer.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
-    : faqData[activeCategory as keyof typeof faqData]
+export function HelpCenter({ faqs }: HelpCenterProps) {
+  const [activeCategory, setActiveCategory] = useState<"general" | "tracking">("general")
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const filteredFaqs = faqs[activeCategory].filter(
+    (faq) =>
+      faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center gap-2 text-2xl">
-            <HelpCircle className="h-6 w-6 text-primary" />
+      <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6 text-center">
+          <div className="font-semibold tracking-tight flex items-center justify-center gap-2 text-2xl">
+            <svg
+              className="lucide lucide-circle-help h-6 w-6 text-primary"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <path d="M12 17h.01" />
+            </svg>
             مركز المساعدة
-          </CardTitle>
-          <CardDescription>نحن هنا لمساعدتك. ابحث عن إجابات لأسئلتك أو تواصل معنا مباشرة</CardDescription>
-        </CardHeader>
-        <CardContent>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            نحن هنا لمساعدتك. ابحث عن إجابات لأسئلتك أو تواصل معنا مباشرة
+          </div>
+        </div>
+        <div className="p-6 pt-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
+            <input
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-10"
               placeholder="ابحث عن سؤالك هنا..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="cursor-pointer hover:bg-accent transition-colors">
-          <CardContent className="flex items-center gap-3 p-4">
-            <Phone className="h-8 w-8 text-primary" />
+        <div
+          className="rounded-lg border bg-card text-card-foreground shadow-sm cursor-pointer hover:bg-accent transition-colors"
+          onClick={() => setActiveCategory("general")}
+        >
+          <div className="flex items-center gap-3 p-4">
+            <svg
+              className="lucide lucide-phone h-8 w-8 text-primary"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
             <div>
               <h3 className="font-semibold">اتصل بنا</h3>
               <p className="text-sm text-muted-foreground">+20 123 456 7890</p>
             </div>
-          </CardContent>
-        </Card>
-        <Card className="cursor-pointer hover:bg-accent transition-colors">
-          <CardContent className="flex items-center gap-3 p-4">
-            <Mail className="h-8 w-8 text-primary" />
+          </div>
+        </div>
+
+        <div
+          className="rounded-lg border bg-card text-card-foreground shadow-sm cursor-pointer hover:bg-accent transition-colors"
+          onClick={() => setActiveCategory("tracking")}
+        >
+          <div className="flex items-center gap-3 p-4">
+            <svg
+              className="lucide lucide-mail h-8 w-8 text-primary"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect height="16" rx="2" width="20" x="2" y="4" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg>
             <div>
-              <h3 className="font-semibold">راسلنا</h3>
-              <p className="text-sm text-muted-foreground">support@madrasati.com</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="cursor-pointer hover:bg-accent transition-colors">
-          <CardContent className="flex items-center gap-3 p-4">
-            <MessageSquare className="h-8 w-8 text-primary" />
-            <div>
-              <h3 className="font-semibold">دردشة مباشرة</h3>
-              <p className="text-sm text-muted-foreground">متاح 24/7</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* FAQ Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>الأسئلة الشائعة</CardTitle>
-          <CardDescription>إجابات للأسئلة الأكثر شيوعاً</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!searchQuery ? (
-            <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="safety" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  الأمان
-                </TabsTrigger>
-                <TabsTrigger value="tracking" className="flex items-center gap-2">
-                  <Bus className="h-4 w-4" />
-                  التتبع
-                </TabsTrigger>
-                <TabsTrigger value="carpool" className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  المشاركة
-                </TabsTrigger>
-                <TabsTrigger value="technical" className="flex items-center gap-2">
-                  <HelpCircle className="h-4 w-4" />
-                  تقني
-                </TabsTrigger>
-              </TabsList>
-
-              {Object.entries(faqData).map(([category, faqs]) => (
-                <TabsContent key={category} value={category} className="mt-4">
-                  <Accordion type="single" collapsible className="w-full">
-                    {faqs.map((faq, index) => (
-                      <AccordionItem key={index} value={`${category}-${index}`}>
-                        <AccordionTrigger className="text-right">{faq.question}</AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </TabsContent>
-              ))}
-            </Tabs>
-          ) : (
-            <div className="space-y-4">
-              {filteredFaqs.length > 0 ? (
-                <>
-                  <div className="flex items-center gap-2 mb-4">
-                    <Badge variant="outline">
-                      {filteredFaqs.length} نتيجة للبحث "{searchQuery}"
-                    </Badge>
-                  </div>
-                  <Accordion type="single" collapsible className="w-full">
-                    {filteredFaqs.map((faq, index) => (
-                      <AccordionItem key={index} value={`search-${index}`}>
-                        <AccordionTrigger className="text-right">{faq.question}</AccordionTrigger>
-                        <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </>
-              ) : (
-                <div className="text-center py-8">
-                  <HelpCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="font-semibold mb-2">لم نجد نتائج</h3>
-                  <p className="text-muted-foreground mb-4">
-                    لم نجد أي أسئلة تطابق بحثك. جرب كلمات مختلفة أو تواصل معنا مباشرة.
-                  </p>
-                  <Button variant="outline">تواصل مع الدعم</Button>
-                </div>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Contact Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>لم تجد ما تبحث عنه؟</CardTitle>
-          <CardDescription>فريق الدعم جاهز لمساعدتك</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <h4 className="font-semibold">أوقات العمل</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>الأحد - الخميس</span>
-                  <span>8:00 ص - 6:00 م</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>الجمعة - السبت</span>
-                  <span>10:00 ص - 4:00 م</span>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-4">
-              <h4 className="font-semibold">وسائل التواصل</h4>
-              <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <Phone className="h-4 w-4 mr-2" />
-                  اتصال هاتفي
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Mail className="h-4 w-4 mr-2" />
-                  بريد إلكتروني
-                </Button>
-                <Button className="w-full justify-start">
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  دردشة مباشرة
-                </Button>
-              </div>
+              <h3 className="font-semibold">تتبع الحافلات</h3>
+              <p className="text-sm text-muted-foreground">help@busstation.com</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {filteredFaqs.map((faq, index) => (
+          <div key={index} className="rounded-lg border bg-card text-card-foreground shadow-sm p-4">
+            <h3 className="font-semibold mb-2">{faq.question}</h3>
+            <p className="text-sm text-muted-foreground">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

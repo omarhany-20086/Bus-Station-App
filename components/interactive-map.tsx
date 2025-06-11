@@ -142,10 +142,8 @@ export function InteractiveMap({ locations, selectedChild, onLocationSelect }: I
             <div
               key={location.id}
               className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all hover:scale-110 gpu-accelerated"
-              style={{
-                left: `${(location.lng + 180) * (100 / 360)}%`,
-                top: `${(90 - location.lat) * (100 / 180)}%`,
-              }}
+              style={{ left: `${location.lng}%`, top: `${location.lat}%` }}
+              data-testid={`bus-marker-${location.id}`}
               onClick={() => {
                 setSelectedLocation(location)
                 onLocationSelect?.(location)
