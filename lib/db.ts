@@ -104,6 +104,17 @@ export async function initDatabase() {
       )
     `);
 
+    // Create route_status table
+    await query(`
+      CREATE TABLE IF NOT EXISTS route_status (
+        id SERIAL PRIMARY KEY,
+        route_number VARCHAR(10) NOT NULL,
+        status VARCHAR(20) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log("Database initialized successfully");
   } catch (error) {
     console.error("Error initializing database", error);

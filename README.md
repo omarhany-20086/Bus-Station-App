@@ -1,6 +1,104 @@
 # Bus Station App
 
-A modern web application for managing bus station operations, built with Next.js and TypeScript.
+A modern web application for managing bus routes, schedules, and real-time updates.
+
+## Prerequisites
+
+- Node.js 18.x (required by the project)
+- pnpm (recommended package manager)
+
+### Installing pnpm
+
+If you don't have pnpm installed, you can install it using one of these methods:
+
+**Using npm:**
+
+```bash
+npm install -g pnpm
+```
+
+**Using PowerShell (Windows):**
+
+```powershell
+iwr https://get.pnpm.io/install.ps1 -useb | iex
+```
+
+**Using curl (macOS/Linux):**
+
+```bash
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+## Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd bus-station-app
+```
+
+2. Install dependencies:
+
+```bash
+pnpm install
+```
+
+3. Set up environment variables:
+   Create a `.env` file in the root directory with the following variables:
+
+```env
+DATABASE_URL=your_database_connection_string
+```
+
+4. Run the development server:
+
+```bash
+pnpm dev
+```
+
+5. Run tests:
+
+```bash
+pnpm test
+```
+
+## Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm test` - Run tests
+- `pnpm lint` - Run linting
+
+## Features
+
+- Real-time bus tracking
+- Route management
+- Schedule management
+- User authentication
+- Admin dashboard
+- Mobile-responsive design
+
+## Tech Stack
+
+- Next.js 14
+- TypeScript
+- PostgreSQL
+- Tailwind CSS
+- Shadcn UI
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🚀 Features
 

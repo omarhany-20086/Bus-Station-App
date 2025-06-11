@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/lib/auth-context";
 import { LayoutWrapper } from "@/components/layout-wrapper";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body className="font-sans">
-        <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <LayoutWrapper>{children}</LayoutWrapper>
-            <Toaster />
-          </ThemeProvider>
-        </AuthProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <AuthProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+              <LayoutWrapper>{children}</LayoutWrapper>
+              <Toaster />
+            </ThemeProvider>
+          </AuthProvider>
+        </Suspense>
       </body>
     </html>
   );
