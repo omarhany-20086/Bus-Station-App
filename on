@@ -1,0 +1,37 @@
+[1mdiff --git a/package.json b/package.json[m
+[1mindex acdaf12..412ca7d 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -48,11 +48,11 @@[m
+     "@testing-library/jest-dom": "latest",[m
+     "@testing-library/react": "latest",[m
+     "autoprefixer": "^10.4.20",[m
+[31m-    "bcrypt": "^5.1.1",[m
+[32m+[m[32m    "bcryptjs": "^2.4.3",[m
+     "class-variance-authority": "^0.7.1",[m
+     "clsx": "^2.1.1",[m
+     "cmdk": "1.0.4",[m
+[31m-    "date-fns": "latest",[m
+[32m+[m[32m    "date-fns": "^2.30.0",[m
+     "embla-carousel-react": "8.5.1",[m
+     "gsap": "latest",[m
+     "input-otp": "1.4.1",[m
+[36m@@ -63,8 +63,7 @@[m
+     "next-themes": "latest",[m
+     "node-fetch": "^2.7.0",[m
+     "node-notifier": "latest",[m
+[31m-    "pg": "^8.11.3",[m
+[31m-    "pg-connection-string": "^2.6.2",[m
+[32m+[m[32m    "postgres": "^3.4.3",[m
+     "react": "^18",[m
+     "react-day-picker": "8.10.1",[m
+     "react-dom": "^18",[m
+[36m@@ -82,7 +81,7 @@[m
+     "@babel/plugin-transform-typescript": "^7.27.1",[m
+     "@testing-library/jest-dom": "^6.4.2",[m
+     "@testing-library/react": "^14.2.1",[m
+[31m-    "@types/bcrypt": "^5.0.2",[m
+[32m+[m[32m    "@types/bcryptjs": "^2.4.6",[m
+     "@types/jest": "^29.5.12",[m
+     "@types/node": "^22",[m
+     "@types/react": "^18",[m
